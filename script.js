@@ -12,6 +12,12 @@ const filterWeather = (condition) => {
   if (condition === "all") {
     allDays.forEach((day) => {
       day.classList.remove("hidden");
+      const errorMessage = document.getElementById("errordata");
+      
+      errorMessage.classList.add("hidden");
+      
+      const nextDays = document.getElementById("nextDays");
+      nextDays.classList.remove("hidden");
     });
     return;
   }
