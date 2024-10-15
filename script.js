@@ -7,9 +7,8 @@ document.getElementById("weatherFilter").addEventListener("change", function () 
 
 const filterWeather = (condition) => {
     const nextDays = document.getElementById("nextDays");
-    const allDays = Array.from(nextDays.children); // Get all weather cards
+    const allDays = Array.from(nextDays.children); 
 
-    // Show all cards if "all" is selected
     if (condition === "all") {
         allDays.forEach(day => {
             day.classList.remove("hidden");
@@ -17,7 +16,6 @@ const filterWeather = (condition) => {
         return;
     }
 
-    // Hide or show cards based on the selected condition
     allDays.forEach(day => {
         const dayConditionText = day.querySelector(".card-body p:nth-child(1)").textContent.toLowerCase();
         if (dayConditionText.includes(condition)) {
@@ -49,6 +47,8 @@ const displayWeatherByCity = async (cityName) => {
         todayWeather.classList.remove("hidden");
         const errorMessage = document.getElementById("error");
         errorMessage.classList.add("hidden");
+        const nextDays = document.getElementById("nextDays");
+        nextDays.classList.remove("hidden");
     } catch (error) {
         console.error("Failed to fetch weather data:", error.message);
         const errorMessage = document.getElementById("error");
@@ -56,6 +56,8 @@ const displayWeatherByCity = async (cityName) => {
         errorMessage.classList.remove("hidden");
         const todayWeather = document.getElementById("todayWeather");
         todayWeather.classList.add("hidden");
+        const nextDays = document.getElementById("nextDays");
+        nextDays.classList.add("hidden");
     }
 };
 
