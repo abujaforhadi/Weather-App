@@ -1,84 +1,103 @@
-// Add this code to your existing script
-
-document.getElementById("weatherFilter").addEventListener("change", function () {
+document
+  .getElementById("weatherFilter")
+  .addEventListener("change", function () {
     const selectedCondition = this.value.toLowerCase();
     filterWeather(selectedCondition);
-});
+  });
 
 const filterWeather = (condition) => {
-    const nextDays = document.getElementById("nextDays");
-    const allDays = Array.from(nextDays.children); 
+  const nextDays = document.getElementById("nextDays");
+  const allDays = Array.from(nextDays.children);
 
-    if (condition === "all") {
-        allDays.forEach(day => {
-            day.classList.remove("hidden");
-        });
-        return;
-    }
-
-    allDays.forEach(day => {
-        const dayConditionText = day.querySelector(".card-body p:nth-child(1)").textContent.toLowerCase();
-        if (dayConditionText.includes(condition)) {
-            day.classList.remove("hidden");
-        } else {
-            day.classList.add("hidden");
-        }
+  if (condition === "all") {
+    allDays.forEach((day) => {
+      day.classList.remove("hidden");
     });
+    return;
+  }
+
+  allDays.forEach((day) => {
+    const dayConditionText = day
+      .querySelector(".card-body p:nth-child(1)")
+      .textContent.toLowerCase();
+    if (dayConditionText.includes(condition)) {
+      day.classList.remove("hidden");
+      const errorMessage = document.getElementById("errordata");
+      
+      errorMessage.classList.add("hidden");
+      
+      const nextDays = document.getElementById("nextDays");
+      nextDays.classList.remove("hidden");
+    } else {
+      day.classList.add("hidden");
+      const errorMessage = document.getElementById("errordata");
+      errorMessage.textContent = `${condition} Condition data not found`;
+      errorMessage.classList.remove("hidden");
+      
+      const nextDays = document.getElementById("nextDays");
+      nextDays.classList.add("hidden");
+      
+    }
+  });
 };
 
 document.getElementById("getWeather").addEventListener("click", function () {
-    const city = document.getElementById("city");
-    const cityN = city.value;
-    const cityName = cityN.toLowerCase();
-    city.value = "";
-    displayWeatherByCity(cityName);
+  const city = document.getElementById("city");
+  const cityN = city.value;
+  const cityName = cityN.toLowerCase();
+  city.value = "";
+  displayWeatherByCity(cityName);
 });
 
 const displayWeatherByCity = async (cityName) => {
-    const apiKey = "93baeb4ced524ec5ad8142345241510";
-    try {
-        const response = await fetch(
-            `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${cityName}&days=5`
-        );
+  const apiKey = "93baeb4ced524ec5ad8142345241510";
+  try {
+    const response = await fetch(
+      `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${cityName}&days=5`
+    );
 
-        const weatherData = await response.json();
-        displayWeather(weatherData);
-        const todayWeather = document.getElementById("todayWeather");
-        todayWeather.classList.remove("hidden");
-        const errorMessage = document.getElementById("error");
-        errorMessage.classList.add("hidden");
-        const nextDays = document.getElementById("nextDays");
-        nextDays.classList.remove("hidden");
-    } catch (error) {
-        console.error("Failed to fetch weather data:", error.message);
-        const errorMessage = document.getElementById("error");
-        errorMessage.textContent = `${cityName} weather data not found. Please try again...`;
-        errorMessage.classList.remove("hidden");
-        const todayWeather = document.getElementById("todayWeather");
-        todayWeather.classList.add("hidden");
-        const nextDays = document.getElementById("nextDays");
-        nextDays.classList.add("hidden");
-    }
+    const weatherData = await response.json();
+    displayWeather(weatherData);
+    const todayWeather = document.getElementById("todayWeather");
+    todayWeather.classList.remove("hidden");
+    const errorMessage = document.getElementById("error");
+    errorMessage.classList.add("hidden");
+    const nextDays = document.getElementById("nextDays");
+    nextDays.classList.remove("hidden");
+    const Filterdiv = document.getElementById("Filterdiv");
+    Filterdiv.classList.remove("hidden");
+  } catch (error) {
+    console.error("Failed to fetch weather data:", error.message);
+    const errorMessage = document.getElementById("error");
+    errorMessage.textContent = `${cityName} weather data not found. Please try again...`;
+    errorMessage.classList.remove("hidden");
+    const todayWeather = document.getElementById("todayWeather");
+    todayWeather.classList.add("hidden");
+    const nextDays = document.getElementById("nextDays");
+    nextDays.classList.add("hidden");
+    const Filterdiv = document.getElementById("Filterdiv");
+    Filterdiv.classList.add("hidden");
+  }
 };
 
 const displayWeather = (weatherData) => {
-    // Today weather
-    const today = weatherData.current;
-    let bgClass = "bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700";
+  // Today weather
+  const today = weatherData.current;
+  let bgClass = "bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700";
 
-    if (today.condition.text.includes("Sunny")) {
-        bgClass = "bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-700";
-    } else if (today.condition.text.toLowerCase().includes("cloudy")) {
-        bgClass = "bg-gradient-to-r from-gray-400 via-gray-500 to-gray-700";
-    } else if (today.condition.text.toLowerCase().includes("rain")) {
-        bgClass = "bg-gradient-to-r from-blue-500 via-blue-600 to-gray-700";
-    } else if (today.condition.text.toLowerCase().includes("clear")) {
-        bgClass = "bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600";
-    }
+  if (today.condition.text.includes("Sunny")) {
+    bgClass = "bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-700";
+  } else if (today.condition.text.toLowerCase().includes("cloudy")) {
+    bgClass = "bg-gradient-to-r from-gray-400 via-gray-500 to-gray-700";
+  } else if (today.condition.text.toLowerCase().includes("rain")) {
+    bgClass = "bg-gradient-to-r from-blue-500 via-blue-600 to-gray-700";
+  } else if (today.condition.text.toLowerCase().includes("clear")) {
+    bgClass = "bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600";
+  }
 
-    const location = weatherData.location;
-    const todayWeatherDiv = document.getElementById("todayWeather");
-    todayWeatherDiv.innerHTML = `
+  const location = weatherData.location;
+  const todayWeatherDiv = document.getElementById("todayWeather");
+  todayWeatherDiv.innerHTML = `
         <div class="card mx-10 ${bgClass} text-white shadow-xl">
             <div class="card-body items-center text-center">
                 <h2 class="card-title">
@@ -104,30 +123,30 @@ const displayWeather = (weatherData) => {
         </div>
     `;
 
-    // Next 5 day weather
-    const nextDays = document.getElementById("nextDays");
-    nextDays.innerHTML = "";
-    const nextDay = weatherData.forecast.forecastday;
+  // Next 5 day weather
+  const nextDays = document.getElementById("nextDays");
+  nextDays.innerHTML = "";
+  const nextDay = weatherData.forecast.forecastday;
 
-    nextDay.forEach((element) => {
-        const div = document.createElement("div");
-        let bgClass = "bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700";
+  nextDay.forEach((element) => {
+    const div = document.createElement("div");
+    let bgClass = "bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700";
 
-        if (element.day.condition.text.includes("Sunny")) {
-            bgClass = "bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-700";
-        } else if (element.day.condition.text.toLowerCase().includes("cloudy")) {
-            bgClass = "bg-gradient-to-r from-gray-400 via-gray-500 to-gray-700";
-        } else if (element.day.condition.text.toLowerCase().includes("rain")) {
-            bgClass = "bg-gradient-to-r from-blue-500 via-blue-600 to-gray-700";
-        } else if (element.day.condition.text.toLowerCase().includes("clear")) {
-            bgClass = "bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600";
-        }
+    if (element.day.condition.text.includes("Sunny")) {
+      bgClass = "bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-700";
+    } else if (element.day.condition.text.toLowerCase().includes("cloudy")) {
+      bgClass = "bg-gradient-to-r from-gray-400 via-gray-500 to-gray-700";
+    } else if (element.day.condition.text.toLowerCase().includes("rain")) {
+      bgClass = "bg-gradient-to-r from-blue-500 via-blue-600 to-gray-700";
+    } else if (element.day.condition.text.toLowerCase().includes("clear")) {
+      bgClass = "bg-gradient-to-r from-blue-300 via-blue-400 to-blue-600";
+    }
 
-        const dateStr = `${element.date}`;
-        const dayName = getDayNameFromDate(dateStr);
-        div.classList.add("carousel-item");
+    const dateStr = `${element.date}`;
+    const dayName = getDayNameFromDate(dateStr);
+    div.classList.add("carousel-item");
 
-        div.innerHTML = `
+    div.innerHTML = `
             <div class="card ${bgClass} text-white shadow-xl">
                 <div class="card-body items-center text-center">
                     <h2 class="card-title">${dayName}</h2>
@@ -148,8 +167,8 @@ const displayWeather = (weatherData) => {
                 </div>
             </div>
         `;
-        nextDays.appendChild(div);
-    });
+    nextDays.appendChild(div);
+  });
 };
 
 displayWeatherByCity("dhaka");
