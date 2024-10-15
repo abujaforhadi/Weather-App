@@ -7,6 +7,4 @@ const getDayNameFromDate = (dateString) => {
     return dayNames[date.getDay()];
 };
 
-const dateStr = "2024-10-15"; 
-const dayName = getDayNameFromDate(dateStr);
-console.log(dayName);
+
