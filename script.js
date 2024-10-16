@@ -6,6 +6,7 @@ document
   });
   const filterWeather = (condition) => {
     const nextDays = document.getElementById("nextDays");
+    const errorMessage = document.getElementById("errordata");
     const allDays = Array.from(nextDays.children);
   
     // Show all days if the "all" option is selected
@@ -44,15 +45,19 @@ document
       const matchesCondition = keywords.some(keyword => dayConditionText.includes(keyword));
   
       if (matchesCondition) {
+        errorMessage.classList.add("hidden");
+
         day.classList.remove("hidden");
         dataFound = true; 
       } else {
+        errorMessage.classList.add("hidden");
+
         day.classList.add("hidden");
       }
     });
   
    
-    const errorMessage = document.getElementById("errordata");
+   
     if (!dataFound) {
       errorMessage.textContent = `${condition.charAt(0).toUpperCase() + condition.slice(1)} Condition data not found`;
       errorMessage.classList.remove("hidden");
@@ -106,6 +111,8 @@ const displayWeatherByCity = async (cityName) => {
 };
 
 const displayWeather = (weatherData) => {
+  const errorMessage = document.getElementById("errordata");
+  errorMessage.classList.add("hidden");
   // Today weather
   const today = weatherData.current;
   let bgClass = "bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700";
