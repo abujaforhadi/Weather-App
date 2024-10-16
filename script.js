@@ -4,48 +4,67 @@ document
     const selectedCondition = this.value.toLowerCase();
     filterWeather(selectedCondition);
   });
-
-const filterWeather = (condition) => {
-  const nextDays = document.getElementById("nextDays");
-  const allDays = Array.from(nextDays.children);
-
-  if (condition === "all") {
-    allDays.forEach((day) => {
-      day.classList.remove("hidden");
-      const errorMessage = document.getElementById("errordata");
-      
-      errorMessage.classList.add("hidden");
-      
-      const nextDays = document.getElementById("nextDays");
-      nextDays.classList.remove("hidden");
-    });
-    return;
-  }
-
-  allDays.forEach((day) => {
-    const dayConditionText = day
-      .querySelector(".card-body p:nth-child(1)")
-      .textContent.toLowerCase();
-    if (dayConditionText.includes(condition)) {
-      day.classList.remove("hidden");
-      const errorMessage = document.getElementById("errordata");
-      
-      errorMessage.classList.add("hidden");
-      
-      const nextDays = document.getElementById("nextDays");
-      nextDays.classList.remove("hidden");
-    } else {
-      day.classList.add("hidden");
-      const errorMessage = document.getElementById("errordata");
-      errorMessage.textContent = `${condition} Condition data not found`;
-      errorMessage.classList.remove("hidden");
-      
-      const nextDays = document.getElementById("nextDays");
-      nextDays.classList.add("hidden");
-      
+  const filterWeather = (condition) => {
+    const nextDays = document.getElementById("nextDays");
+    const allDays = Array.from(nextDays.children);
+  
+    // Show all days if the "all" option is selected
+    if (condition === "all") {
+      allDays.forEach((day) => {
+        day.classList.remove("hidden");
+        const errorMessage = document.getElementById("errordata");
+        errorMessage.classList.add("hidden");
+        nextDays.classList.remove("hidden");
+      });
+      return;
     }
-  });
-};
+  
+    // Normalize the condition by removing '%' and converting to lowercase
+    const normalizedCondition = condition.toLowerCase();
+  
+    // Define keywords associated with each weather condition
+    const conditionKeywords = {
+      rain: ["rain", "drizzle", "shower", "patchy rain", "light rain", "heavy rain"],
+      sunny: ["sunny", "clear"],
+      cloudy: ["cloudy", "overcast"],
+      clear: ["clear"],
+    };
+  
+    // Check if the selected condition has defined keywords
+    const keywords = conditionKeywords[normalizedCondition] || [];
+  
+    let dataFound = false; // Track if any matching data is found
+  
+    allDays.forEach((day) => {
+      const dayConditionText = day
+        .querySelector(".card-body p:nth-child(1)")
+        .textContent.toLowerCase();
+  
+      // Check if any keyword for the selected condition matches the day's condition text
+      const matchesCondition = keywords.some(keyword => dayConditionText.includes(keyword));
+  
+      if (matchesCondition) {
+        day.classList.remove("hidden");
+        dataFound = true; 
+      } else {
+        day.classList.add("hidden");
+      }
+    });
+  
+   
+    const errorMessage = document.getElementById("errordata");
+    if (!dataFound) {
+      errorMessage.textContent = `${condition.charAt(0).toUpperCase() + condition.slice(1)} Condition data not found`;
+      errorMessage.classList.remove("hidden");
+      nextDays.classList.add("hidden");
+    } else {
+      errorMessage.classList.add("hidden");
+      nextDays.classList.remove("hidden");
+    }
+  };
+  
+  
+  
 
 document.getElementById("getWeather").addEventListener("click", function () {
   const city = document.getElementById("city");
