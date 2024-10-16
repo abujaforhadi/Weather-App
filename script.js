@@ -83,7 +83,7 @@ const displayWeatherByCity = async (cityName) => {
   const apiKey = "93baeb4ced524ec5ad8142345241510";
   try {
     const response = await fetch(
-      `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${cityName}&days=5`
+      `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${cityName}&days=3`
     );
 
     const weatherData = await response.json();
@@ -155,7 +155,7 @@ const displayWeather = (weatherData) => {
         </div>
     `;
 
-  // Next 5 day weather
+  // Next 3 day weather
   const nextDays = document.getElementById("nextDays");
   nextDays.innerHTML = "";
   const nextDay = weatherData.forecast.forecastday;
@@ -176,25 +176,25 @@ const displayWeather = (weatherData) => {
 
     const dateStr = `${element.date}`;
     const dayName = getDayNameFromDate(dateStr);
-    div.classList.add("carousel-item");
+    
 
     div.innerHTML = `
             <div class="card ${bgClass} text-white shadow-xl">
                 <div class="card-body items-center text-center">
-                    <h2 class="card-title">${dayName}</h2>
+                   <h2 class="card-title"></h2>
                 </div>
-                <figure class="px-5">
+                <figure class="">
                     <img src="${element.day.condition.icon}" alt="${element.day.condition.text}" class="rounded-xl" />
                 </figure>
                 <div class="card-body items-center">
-                    <p>Condition: ${element.day.condition.text}</p>
+                
+                
+                    <p> ${element.day.condition.text}</p>
+                    <p>${dayName}</p>
+                   
                     <div class="flex gap-5 md:gap-10">
-                        <div>Sunrise: ${element.astro.sunrise}</div>
-                        <div>Sunset: ${element.astro.sunset}</div>
-                    </div>
-                    <div class="flex gap-5 md:gap-10">
-                        <div>Min Temp: ${element.day.mintemp_c} °C</div>
-                        <div>Max Temp: ${element.day.maxtemp_c} °C</div>
+                        <div>Min: ${element.day.mintemp_c} °C</div>
+                        <div>Max: ${element.day.maxtemp_c} °C</div>
                     </div>
                 </div>
             </div>
