@@ -118,7 +118,7 @@ const displayWeather = (weatherData) => {
   let bgClass = "bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700";
 
   if (today.condition.text.includes("Sunny")) {
-    bgClass = "bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-700";
+    bgClass = "bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-800";
   } else if (today.condition.text.toLowerCase().includes("cloudy")) {
     bgClass = "bg-gradient-to-r from-gray-400 via-gray-500 to-gray-700";
   } else if (today.condition.text.toLowerCase().includes("rain")) {
@@ -165,7 +165,7 @@ const displayWeather = (weatherData) => {
     let bgClass = "bg-gradient-to-r from-blue-400 via-blue-500 to-blue-700";
 
     if (element.day.condition.text.includes("Sunny")) {
-      bgClass = "bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-700";
+      bgClass = "bg-gradient-to-r from-yellow-500 via-yellow-600 to-yellow-800";
     } else if (element.day.condition.text.toLowerCase().includes("cloudy")) {
       bgClass = "bg-gradient-to-r from-gray-400 via-gray-500 to-gray-700";
     } else if (element.day.condition.text.toLowerCase().includes("rain")) {
